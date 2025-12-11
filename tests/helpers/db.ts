@@ -12,19 +12,22 @@ export const prisma = new PrismaClient({ adapter });
  * Truncates all tables to start with a clean state
  */
 export async function resetDatabase() {
-	// Get all table names
-	const tables = await prisma.$queryRaw<
-		Array<{ tablename: string }>
-	>`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
-
-	// Truncate all tables except Prisma migrations table
-	for (const { tablename } of tables) {
-		if (tablename !== "_prisma_migrations") {
-			await prisma.$executeRawUnsafe(
-				`TRUNCATE TABLE "public"."${tablename}" CASCADE;`,
-			);
-		}
-	}
+	// Delete in correct order to respect foreign key constraints
+	await prisma.comment.deleteMany();
+	await prisma.like.deleteMany();
+	await prisma.message.deleteMany();
+	await prisma.conversation.deleteMany();
+	await prisma.userAchievement.deleteMany();
+	await prisma.achievement.deleteMany();
+	await prisma.challengeParticipant.deleteMany();
+	await prisma.challenge.deleteMany();
+	await prisma.post.deleteMany();
+	await prisma.progressPhoto.deleteMany();
+	await prisma.weightEntry.deleteMany();
+	await prisma.teamMember.deleteMany();
+	await prisma.team.deleteMany();
+	await prisma.refreshToken.deleteMany();
+	await prisma.user.deleteMany();
 }
 
 /**
@@ -34,7 +37,7 @@ export async function resetDatabase() {
 export async function setupTestDatabase() {
 	try {
 		// Push schema to test database
-		execSync("npx prisma db push --skip-generate", {
+		execSync("npx prisma db push", {
 			env: { ...process.env, DATABASE_URL: process.env.DATABASE_URL },
 			stdio: "ignore",
 		});
