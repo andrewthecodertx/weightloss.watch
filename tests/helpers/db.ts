@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { execSync } from "child_process";
 
 // Lazy-load Prisma client to ensure DATABASE_URL is set from test setup
@@ -6,8 +7,13 @@ let _prisma: PrismaClient | null = null;
 
 export function getPrisma(): PrismaClient {
 	if (!_prisma) {
-		// Use standard Prisma client - it reads DATABASE_URL from env automatically
-		_prisma = new PrismaClient();
+		const dbUrl = process.env.DATABASE_URL;
+		if (!dbUrl) {
+			throw new Error("DATABASE_URL environment variable is not set");
+		}
+		// Prisma 7 requires the adapter for pg connections
+		const adapter = new PrismaPg({ connectionString: dbUrl });
+		_prisma = new PrismaClient({ adapter });
 	}
 	return _prisma;
 }

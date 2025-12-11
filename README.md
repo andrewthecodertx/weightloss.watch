@@ -2,6 +2,8 @@
 
 A full-featured weight loss tracking application with social features, built with TypeScript, Express, and PostgreSQL.
 
+![Build Status](https://github.com/your-username/wlt/actions/workflows/deploy.yml/badge.svg)
+
 ## Features
 
 - **Weight Tracking** - Log weight entries with body composition metrics
