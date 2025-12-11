@@ -8,6 +8,8 @@ config({ path: path.resolve(__dirname, "../.env.test"), override: true });
 // Set test environment
 process.env.NODE_ENV = "test";
 
-// Force the DATABASE_URL to the test database
-process.env.DATABASE_URL =
-	"postgresql://devuser:devpassword@localhost:5433/testdb?schema=public";
+// Only set DATABASE_URL if not already set (allows CI to override)
+if (!process.env.DATABASE_URL) {
+	process.env.DATABASE_URL =
+		"postgresql://devuser:devpassword@localhost:5433/testdb?schema=public";
+}
