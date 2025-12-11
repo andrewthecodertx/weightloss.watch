@@ -15,38 +15,9 @@ A full-featured weight loss tracking application with social features, built wit
 - **File Uploads** - Profile avatars and progress photos
 - **Responsive Design** - TailwindCSS 4 with mobile support
 
-## Project Structure
-
-```
-src/
-├── controllers/       # Request handlers (business logic)
-│   ├── HomeController.ts
-│   ├── UserController.ts
-│   └── ProductController.ts
-├── models/           # Data models and database operations
-│   ├── User.ts
-│   └── Product.ts
-├── routes/           # Route definitions
-│   ├── index.ts
-│   ├── homeRoutes.ts
-│   ├── userRoutes.ts
-│   ├── productRoutes.ts
-│   └── apiRoutes.ts
-├── views/            # EJS templates
-│   ├── layout.ejs
-│   ├── home/
-│   ├── users/
-│   ├── products/
-│   └── errors/
-├── middleware/       # Custom middleware
-│   ├── logger.ts
-│   └── errorHandler.ts
-└── server.ts         # Application entry point
-```
-
 ## Quick Start
 
-See [QUICKSTART.md](./QUICKSTART.md) for detailed setup instructions.
+See [QUICKSTART.md](./docs/QUICKSTART.md) for detailed setup instructions.
 
 ### Prerequisites
 
@@ -58,8 +29,8 @@ See [QUICKSTART.md](./QUICKSTART.md) for detailed setup instructions.
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/yourusername/wlt.git
-cd wlt
+git clone https://github.com/andrewthecodertx/weightloss.watch.git
+cd weightloss.watch
 
 # 2. Install dependencies
 npm install
@@ -98,43 +69,10 @@ Visit **http://localhost:3000** in your browser!
 - **Process Management**: PM2 (production)
 - **CI/CD**: GitHub Actions
 
-## Deployment
-
-### For Production Deployment
-
-**Complete step-by-step guide**: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
-
-**Quick deployment checklist**: [docs/DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md)
-
-### Deployment Overview
-
-1. **Database**: PostgreSQL at 192.168.149.42 (see deployment docs)
-2. **Application**: Node.js 20.x with PM2 process manager
-3. **Web Server**: Nginx with SSL
-4. **CI/CD**: GitHub Actions for automatic deployment
-
-### Quick Deployment Steps
-
-```bash
-# On production server
-npm ci --only=production
-npx prisma generate
-npx prisma migrate deploy
-npm run css:build
-npx tsc
-pm2 start ecosystem.config.js
-```
-
-See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for complete instructions including:
-- Server setup
-- Database configuration
-- SSL certificates
-- GitHub Actions setup
-- Troubleshooting
-
 ## Development Commands
 
 ### Database
+
 ```bash
 npm run db:start       # Start PostgreSQL container
 npm run db:stop        # Stop PostgreSQL container
@@ -145,6 +83,7 @@ npm run db:seed        # Seed with test data
 ```
 
 ### Application
+
 ```bash
 npm run dev            # Start with hot reload + CSS watch
 npm run dev:server     # Start server only (no CSS watch)
@@ -153,6 +92,7 @@ npm run css:build      # Build CSS once
 ```
 
 ### Testing
+
 ```bash
 npm test               # Run all tests
 npm run test:watch     # Run tests in watch mode
@@ -160,12 +100,14 @@ npm run test:coverage  # Generate coverage report
 ```
 
 ### Code Quality
+
 ```bash
 npm run lint           # Run ESLint
 npm run format         # Format with Prettier
 ```
 
 ### Build
+
 ```bash
 npm run build          # Build for production
 npm start              # Run production build
@@ -173,13 +115,10 @@ npm start              # Run production build
 
 ## Documentation
 
-- **[QUICKSTART.md](./QUICKSTART.md)** - Quick setup guide
-- **[CLAUDE.md](./CLAUDE.md)** - Development patterns and architecture
-- **[TESTING.md](./TESTING.md)** - Testing guide
-- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Production deployment guide
-- **[DEPLOYMENT_CHECKLIST.md](./docs/DEPLOYMENT_CHECKLIST.md)** - Deployment checklist
-- **[DATA_PERSISTENCE.md](./docs/DATA_PERSISTENCE.md)** - Data storage configuration
-- **[SERVER_CONFIG.md](./docs/SERVER_CONFIG.md)** - Server-specific configuration
+- **[QUICKSTART.md](./docs/QUICKSTART.md)** - Quick setup guide
+- **[TESTING.md](./docs/TESTING.md)** - Testing guide
+- **[REQUIREMENTS.md](./docs/REQUIREMENTS.md)** - Technical requirements
+- **[STYLE_GUIDE.md](./docs/STYLE_GUIDE.md)** - UI/UX styling conventions
 
 ## Project Structure
 
@@ -221,16 +160,8 @@ public/
 
 ## License
 
-ISC
-
-## Support
-
-For issues or questions:
-- Check documentation in `/docs`
-- Review [CLAUDE.md](./CLAUDE.md) for development patterns
-- Check [TESTING.md](./TESTING.md) for testing guidance
-- See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for deployment help
+MIT - See [LICENSE](./LICENSE) for details.
 
 ---
 
-**Built with ❤️ using TypeScript, Express, and PostgreSQL**
+**Built with TypeScript, Express, and PostgreSQL**
