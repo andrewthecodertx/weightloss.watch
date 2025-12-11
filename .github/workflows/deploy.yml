@@ -40,6 +40,8 @@ jobs:
               run: npm ci
 
             - name: Generate Prisma Client
+              env:
+                  DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb?schema=public
               run: npx prisma generate
 
             - name: Setup test database
