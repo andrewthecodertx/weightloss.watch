@@ -14,7 +14,7 @@ export const webAuthenticate = async (
 ): Promise<void> => {
 	try {
 		// First try access token from cookie
-		let accessToken = req.cookies.accessToken;
+		const accessToken = req.cookies.accessToken;
 
 		if (accessToken) {
 			try {
