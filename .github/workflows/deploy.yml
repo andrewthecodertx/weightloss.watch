@@ -47,7 +47,7 @@ jobs:
             - name: Setup test database
               env:
                   DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/testdb?schema=public
-              run: npx prisma db push --skip-generate
+              run: npx prisma db push
 
             - name: Run linter
               run: npm run lint
