@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { execSync } from "child_process";
 
 // Lazy-load Prisma client to ensure DATABASE_URL is set from test setup
@@ -7,15 +6,13 @@ let _prisma: PrismaClient | null = null;
 
 export function getPrisma(): PrismaClient {
 	if (!_prisma) {
-		const adapter = new PrismaPg({
-			connectionString: process.env.DATABASE_URL,
-		});
-		_prisma = new PrismaClient({ adapter });
+		// Use standard Prisma client - it reads DATABASE_URL from env automatically
+		_prisma = new PrismaClient();
 	}
 	return _prisma;
 }
 
-// For backwards compatibility
+// For backwards compatibility - use a getter proxy
 export const prisma = new Proxy({} as PrismaClient, {
 	get(_target, prop) {
 		return getPrisma()[prop as keyof PrismaClient];
