@@ -371,7 +371,8 @@ describe("Middleware", () => {
 			expect(res.redirect).toHaveBeenCalled();
 			const redirectUrl = (res.redirect as jest.Mock).mock.calls[0][0];
 			expect(redirectUrl).toContain("/login");
-			expect(redirectUrl).toContain("Session expired");
+			// URL-encoded message
+			expect(redirectUrl).toContain("Session%20expired");
 			expect(next).not.toHaveBeenCalled();
 		});
 	});

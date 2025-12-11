@@ -1,10 +1,6 @@
 import request from "supertest";
 import app from "../../src/server";
-import {
-	prisma,
-	resetDatabase,
-	createAuthenticatedUser,
-} from "../helpers";
+import { prisma, resetDatabase, createAuthenticatedUser } from "../helpers";
 
 describe("Dashboard Routes", () => {
 	beforeEach(async () => {
@@ -27,9 +23,7 @@ describe("Dashboard Routes", () => {
 		});
 
 		it("should redirect to login if not authenticated", async () => {
-			const response = await request(app)
-				.get("/dashboard")
-				.expect(302);
+			const response = await request(app).get("/dashboard").expect(302);
 
 			expect(response.headers.location).toContain("/login");
 			expect(response.headers.location).toContain("error=");
@@ -47,7 +41,8 @@ describe("Dashboard Routes", () => {
 				.expect(302);
 
 			expect(response.headers.location).toContain("/login");
-			expect(response.headers.location).toContain("Session expired");
+			// URL-encoded message
+			expect(response.headers.location).toContain("Session%20expired");
 		});
 
 		it("should clear cookies on invalid session", async () => {
@@ -62,7 +57,7 @@ describe("Dashboard Routes", () => {
 				.expect(302);
 
 			expect(response.headers["set-cookie"]).toBeDefined();
-			// Check if cookies are being cleared
+			// Check if cookies are being cleared (either Max-Age=0 or Expires in past)
 			const setCookieHeaders = response.headers["set-cookie"];
 			const cookiesArray = Array.isArray(setCookieHeaders)
 				? setCookieHeaders
@@ -70,7 +65,8 @@ describe("Dashboard Routes", () => {
 			const cookiesCleared = cookiesArray.some(
 				(cookie: string) =>
 					cookie.includes("refreshToken=") &&
-					cookie.includes("Max-Age=0"),
+					(cookie.includes("Max-Age=0") ||
+						cookie.includes("Expires=Thu, 01 Jan 1970")),
 			);
 			expect(cookiesCleared).toBe(true);
 		});

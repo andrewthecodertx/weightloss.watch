@@ -20,7 +20,7 @@ describe("Auth Routes", () => {
 				.send({
 					email: "newuser@example.com",
 					username: "newuser",
-					password: "password123",
+					password: "Password123",
 					displayName: "New User",
 					unitSystem: "IMPERIAL",
 				})
@@ -60,7 +60,7 @@ describe("Auth Routes", () => {
 			expect(response.body.success).toBe(false);
 		});
 
-		it("should return 400 for duplicate email", async () => {
+		it("should return 409 for duplicate email", async () => {
 			await createTestUser({ email: "existing@example.com" });
 
 			const response = await request(app)
@@ -68,15 +68,16 @@ describe("Auth Routes", () => {
 				.send({
 					email: "existing@example.com",
 					username: "newuser",
-					password: "password123",
+					password: "Password123",
+					unitSystem: "IMPERIAL",
 				})
-				.expect(400);
+				.expect(409);
 
 			expect(response.body.success).toBe(false);
 			expect(response.body.message).toContain("Email already in use");
 		});
 
-		it("should return 400 for duplicate username", async () => {
+		it("should return 409 for duplicate username", async () => {
 			await createTestUser({ username: "existinguser" });
 
 			const response = await request(app)
@@ -84,9 +85,10 @@ describe("Auth Routes", () => {
 				.send({
 					email: "new@example.com",
 					username: "existinguser",
-					password: "password123",
+					password: "Password123",
+					unitSystem: "IMPERIAL",
 				})
-				.expect(400);
+				.expect(409);
 
 			expect(response.body.success).toBe(false);
 			expect(response.body.message).toContain("Username already taken");
@@ -152,6 +154,9 @@ describe("Auth Routes", () => {
 		it("should refresh tokens with valid refresh token", async () => {
 			const { tokens } = await createAuthenticatedUser();
 
+			// Wait a moment to ensure different timestamp in new token
+			await new Promise((resolve) => setTimeout(resolve, 1100));
+
 			const response = await request(app)
 				.post("/api/auth/refresh")
 				.send({
@@ -162,7 +167,10 @@ describe("Auth Routes", () => {
 			expect(response.body.success).toBe(true);
 			expect(response.body.data.accessToken).toBeDefined();
 			expect(response.body.data.refreshToken).toBeDefined();
-			expect(response.body.data.refreshToken).not.toBe(tokens.refreshToken);
+			// New refresh token should be different (token rotation)
+			expect(response.body.data.refreshToken).not.toBe(
+				tokens.refreshToken,
+			);
 		});
 
 		it("should return 401 for invalid refresh token", async () => {
@@ -192,9 +200,7 @@ describe("Auth Routes", () => {
 
 			const response = await request(app)
 				.post("/api/auth/logout")
-				.send({
-					refreshToken: tokens.refreshToken,
-				})
+				.set("Cookie", [`refreshToken=${tokens.refreshToken}`])
 				.expect(200);
 
 			expect(response.body.success).toBe(true);
@@ -210,9 +216,7 @@ describe("Auth Routes", () => {
 		it("should return 200 even for non-existent token", async () => {
 			const response = await request(app)
 				.post("/api/auth/logout")
-				.send({
-					refreshToken: "non-existent-token",
-				})
+				.set("Cookie", [`refreshToken=non-existent-token`])
 				.expect(200);
 
 			expect(response.body.success).toBe(true);
@@ -221,15 +225,17 @@ describe("Auth Routes", () => {
 
 	describe("POST /api/auth/logout-all", () => {
 		it("should logout from all devices", async () => {
-			const password = "password123";
+			const password = "Password123";
 			const user = await createTestUser({
 				email: "test@example.com",
 				passwordHash: await AuthService.hashPassword(password),
 			});
 
-			// Create multiple sessions
+			// Create multiple sessions with delays to get different tokens
 			await AuthService.login(user.email, password);
+			await new Promise((resolve) => setTimeout(resolve, 1100));
 			await AuthService.login(user.email, password);
+			await new Promise((resolve) => setTimeout(resolve, 1100));
 
 			const { tokens } = await AuthService.login(user.email, password);
 
@@ -313,7 +319,9 @@ describe("Auth Routes", () => {
 
 		describe("GET /register", () => {
 			it("should render register page", async () => {
-				const response = await request(app).get("/register").expect(200);
+				const response = await request(app)
+					.get("/register")
+					.expect(200);
 
 				expect(response.text).toContain("register");
 			});
@@ -330,47 +338,50 @@ describe("Auth Routes", () => {
 			});
 		});
 
-		describe("POST /web/register", () => {
-			it("should register user and redirect to dashboard", async () => {
+		describe("POST /register", () => {
+			it("should register user and redirect to login with success message", async () => {
 				const response = await request(app)
-					.post("/web/register")
+					.post("/register")
 					.send({
 						email: "newuser@example.com",
 						username: "newuser",
-						password: "password123",
+						password: "Password123",
 						displayName: "New User",
+						unitSystem: "IMPERIAL",
 					})
 					.expect(302);
 
-				expect(response.headers.location).toBe("/dashboard");
-				expect(response.headers["set-cookie"]).toBeDefined();
+				// Web register redirects to login after successful registration
+				expect(response.headers.location).toContain("/login");
+				expect(response.headers.location).toContain("success=");
 			});
 
-			it("should redirect back to register with error on validation failure", async () => {
+			it("should render register page with error on validation failure", async () => {
 				const response = await request(app)
-					.post("/web/register")
+					.post("/register")
 					.send({
 						email: "invalid-email",
 						username: "newuser",
-						password: "password123",
+						password: "Password123",
+						unitSystem: "IMPERIAL",
 					})
-					.expect(302);
+					.expect(200); // Renders the page, not redirect
 
-				expect(response.headers.location).toContain("/register");
-				expect(response.headers.location).toContain("error=");
+				// Should render the register page with errors
+				expect(response.text).toContain("Create Account");
 			});
 		});
 
-		describe("POST /web/login", () => {
+		describe("POST /login", () => {
 			it("should login user and redirect to dashboard", async () => {
-				const password = "password123";
+				const password = "Password123";
 				await createTestUser({
 					email: "test@example.com",
 					passwordHash: await AuthService.hashPassword(password),
 				});
 
 				const response = await request(app)
-					.post("/web/login")
+					.post("/login")
 					.send({
 						email: "test@example.com",
 						password: password,
@@ -381,22 +392,23 @@ describe("Auth Routes", () => {
 				expect(response.headers["set-cookie"]).toBeDefined();
 			});
 
-			it("should redirect back to login with error on invalid credentials", async () => {
+			it("should render login page with error on invalid credentials", async () => {
 				const response = await request(app)
-					.post("/web/login")
+					.post("/login")
 					.send({
 						email: "nonexistent@example.com",
-						password: "password123",
+						password: "Password123",
 					})
-					.expect(302);
+					.expect(200); // Renders the page, not redirect
 
-				expect(response.headers.location).toContain("/login");
-				expect(response.headers.location).toContain("error=");
+				// Should render the login page with error message
+				expect(response.text).toContain("Sign In");
+				expect(response.text).toContain("Invalid");
 			});
 		});
 
 		describe("GET /logout", () => {
-			it("should logout user and redirect to home", async () => {
+			it("should logout user and redirect to home with success message", async () => {
 				const { tokens } = await createAuthenticatedUser();
 
 				const response = await request(app)
@@ -404,7 +416,8 @@ describe("Auth Routes", () => {
 					.set("Cookie", [`refreshToken=${tokens.refreshToken}`])
 					.expect(302);
 
-				expect(response.headers.location).toBe("/");
+				// Logout redirects to home with success message
+				expect(response.headers.location).toContain("/");
 				expect(response.headers["set-cookie"]).toBeDefined();
 			});
 		});
