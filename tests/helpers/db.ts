@@ -2,9 +2,25 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { execSync } from "child_process";
 
-// Prisma 7 pattern: pass connectionString directly to adapter
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
-export const prisma = new PrismaClient({ adapter });
+// Lazy-load Prisma client to ensure DATABASE_URL is set from test setup
+let _prisma: PrismaClient | null = null;
+
+export function getPrisma(): PrismaClient {
+	if (!_prisma) {
+		const adapter = new PrismaPg({
+			connectionString: process.env.DATABASE_URL,
+		});
+		_prisma = new PrismaClient({ adapter });
+	}
+	return _prisma;
+}
+
+// For backwards compatibility
+export const prisma = new Proxy({} as PrismaClient, {
+	get(_target, prop) {
+		return getPrisma()[prop as keyof PrismaClient];
+	},
+});
 
 /**
  * Reset the test database
@@ -50,7 +66,10 @@ export async function setupTestDatabase() {
  * Teardown test database connection
  */
 export async function teardownTestDatabase() {
-	await prisma.$disconnect();
+	if (_prisma) {
+		await _prisma.$disconnect();
+		_prisma = null;
+	}
 }
 
 /**
