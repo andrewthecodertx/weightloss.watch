@@ -26,19 +26,37 @@
 </head>
 <body class="min-h-screen bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
     <script>
-        // Apply initial theme from user preference, or default to system
-        const userTheme = "<%= typeof user !== 'undefined' && user ? user.theme.toLowerCase() : 'system' %>";
-        const htmlElement = document.documentElement;
+        // Immediate theme application to prevent flash
+        (function() {
+            const userTheme = "<%= typeof user !== 'undefined' && user ? user.theme.toLowerCase() : 'system' %>";
+            const htmlElement = document.documentElement;
+            const isLoggedIn = "<%= typeof user !== 'undefined' && user ? 'true' : 'false' %>" === 'true';
 
-        // Sync localStorage with server theme to prevent double-click issue
-        localStorage.setItem('theme', userTheme);
+            // Clear any existing theme classes
+            htmlElement.classList.remove("light", "dark");
 
-        if (userTheme === "system") {
-            const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-            htmlElement.classList.add(prefersDark ? "dark" : "light");
-        } else {
-            htmlElement.classList.add(userTheme);
-        }
+            // Determine active theme
+            let activeTheme;
+            if (isLoggedIn) {
+                // For logged-in users, use server theme and sync localStorage
+                activeTheme = userTheme;
+                localStorage.setItem('theme', userTheme);
+            } else {
+                // For guests, use localStorage or default to system
+                activeTheme = localStorage.getItem('theme') || userTheme;
+                if (!localStorage.getItem('theme')) {
+                    localStorage.setItem('theme', userTheme);
+                }
+            }
+
+            // Apply the theme immediately
+            if (activeTheme === "system") {
+                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                htmlElement.classList.add(prefersDark ? "dark" : "light");
+            } else {
+                htmlElement.classList.add(activeTheme);
+            }
+        })();
     </script>
     <nav class="bg-slate-800 dark:bg-slate-950 text-white px-8 py-4 flex justify-between items-center border-b border-slate-700 dark:border-slate-800">
         <ul class="flex gap-8 items-center">
@@ -60,7 +78,13 @@
         </ul>
         <ul class="flex gap-4 items-center">
             <!-- Theme Toggle Button -->
-            <li x-data='{ theme: "<%= typeof user !== "undefined" && user ? user.theme.toLowerCase() : "system" %>" }'>
+            <li x-data='{ 
+                theme: "<%= typeof user !== "undefined" && user ? user.theme.toLowerCase() : "system" %>",
+                init() {
+                    // Sync with localStorage on component initialization
+                    this.theme = localStorage.getItem("theme") || this.theme;
+                }
+            }'>
                 <button @click="toggleTheme()" class="p-2 rounded-lg hover:bg-slate-700 dark:hover:bg-gray-900 transition-colors" title="Toggle theme">
                     <!-- Show moon when in light mode or system (prefers light) -->
                     <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">

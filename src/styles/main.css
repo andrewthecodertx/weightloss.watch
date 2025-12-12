@@ -32,11 +32,11 @@
 
 /* Landing page specific styles */
 .hero-gradient {
-	background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+	background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
 }
 
-.hero-gradient-light {
-	background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f8fafc 100%);
+.dark .hero-gradient {
+	background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
 }
 
 /* Progress Arc Animation */
