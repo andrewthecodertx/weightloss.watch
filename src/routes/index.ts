@@ -19,8 +19,8 @@ const router = Router();
 // Mount routes
 router.use("/", homeRoutes);
 router.use("/", webAuthRoutes); // Web auth pages (login, register, logout)
-router.use("/", resourcesRoutes); // Resources routes (public)
 router.use("/", aboutRoutes); // About routes (public)
+router.use("/", resourcesRoutes); // Resources routes (public)
 router.use("/api/auth", authRoutes); // API auth endpoints (JSON)
 router.post(
 	"/api/settings/theme",
