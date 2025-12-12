@@ -7,6 +7,8 @@ import profileRoutes from "./profileRoutes";
 import weightRoutes from "./weightRoutes";
 import teamRoutes from "./teamRoutes";
 import settingsRoutes from "./settingsRoutes";
+import resourcesRoutes from "./resourcesRoutes";
+import aboutRoutes from "./aboutRoutes";
 import { SettingsController } from "../controllers/SettingsController";
 import { WeightController } from "../controllers/WeightController";
 import { authenticate } from "../middleware/auth";
@@ -17,8 +19,14 @@ const router = Router();
 // Mount routes
 router.use("/", homeRoutes);
 router.use("/", webAuthRoutes); // Web auth pages (login, register, logout)
+router.use("/", resourcesRoutes); // Resources routes (public)
+router.use("/", aboutRoutes); // About routes (public)
 router.use("/api/auth", authRoutes); // API auth endpoints (JSON)
-router.post("/api/settings/theme", authenticate, SettingsController.updateTheme); // API theme update
+router.post(
+	"/api/settings/theme",
+	authenticate,
+	SettingsController.updateTheme,
+); // API theme update
 router.delete("/photo/:photoId", webAuthenticate, WeightController.deletePhoto); // Delete progress photo
 router.use("/dashboard", dashboardRoutes);
 router.use("/profile", profileRoutes);
