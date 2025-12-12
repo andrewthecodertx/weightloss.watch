@@ -2,15 +2,15 @@
 	<div class="w-full max-w-md">
 		<!-- Logo/Brand -->
 		<div class="text-center mb-8">
-			<h1 class="text-3xl font-bold text-slate-800">Create Account</h1>
-			<p class="text-gray-600 mt-2">Start your fitness journey today</p>
+			<h1 class="text-3xl font-bold text-slate-800 dark:text-white">Create Account</h1>
+			<p class="text-gray-600 dark:text-slate-300 mt-2">Start your fitness journey today</p>
 		</div>
 
 		<!-- Register Card -->
-		<div class="bg-white p-8 rounded-lg shadow">
+		<div class="bg-white dark:bg-slate-800 p-8 rounded-lg shadow border border-slate-200 dark:border-slate-700">
 			<!-- Error Messages -->
 			<% if (typeof errors !== 'undefined' && errors.length > 0) { %>
-				<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+				<div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded mb-6">
 					<div class="flex items-start gap-2">
 						<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -30,7 +30,7 @@
 			<form method="POST" action="/register" class="space-y-5">
 				<!-- Display Name Field -->
 				<div>
-					<label for="displayName" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="displayName" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Display Name
 					</label>
 					<input 
@@ -38,15 +38,15 @@
 						id="displayName" 
 						name="displayName" 
 						autocomplete="name"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="John Doe"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="John Doe"
 						value="<%= typeof formData !== 'undefined' ? formData.displayName || '' : '' %>"
 					>
 				</div>
 
 				<!-- Username Field -->
 				<div>
-					<label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="username" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Username <span class="text-red-500">*</span>
 					</label>
 					<input 
@@ -55,8 +55,8 @@
 						name="username" 
 						required
 						autocomplete="username"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="johndoe"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="johndoe"
 						value="<%= typeof formData !== 'undefined' ? formData.username || '' : '' %>"
 					>
 					<p class="mt-1 text-xs text-gray-500">3-30 characters, letters, numbers, and underscores only</p>
@@ -64,7 +64,7 @@
 
 				<!-- Email Field -->
 				<div>
-					<label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="email" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Email Address <span class="text-red-500">*</span>
 					</label>
 					<input 
@@ -73,15 +73,15 @@
 						name="email" 
 						required
 						autocomplete="email"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="you@example.com"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="you@example.com"
 						value="<%= typeof formData !== 'undefined' ? formData.email || '' : '' %>"
 					>
 				</div>
 
 				<!-- Password Field -->
 				<div>
-					<label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="password" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Password <span class="text-red-500">*</span>
 					</label>
 					<input 
@@ -90,22 +90,22 @@
 						name="password" 
 						required
 						autocomplete="new-password"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="Create a strong password"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="Create a strong password"
 					>
 					<p class="mt-1 text-xs text-gray-500">Min 8 characters with uppercase, lowercase, and number</p>
 				</div>
 
 				<!-- Unit System Dropdown -->
 				<div>
-					<label for="unitSystem" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="unitSystem" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Unit System <span class="text-red-500">*</span>
 					</label>
 					<select 
 						id="unitSystem" 
 						name="unitSystem" 
 						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow bg-white"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
 					>
 						<option value="IMPERIAL" <%= typeof formData !== 'undefined' && formData.unitSystem === 'IMPERIAL' ? 'selected' : '' %>>Imperial (lbs, ft/in)</option>
 						<option value="METRIC" <%= typeof formData !== 'undefined' && formData.unitSystem === 'METRIC' ? 'selected' : '' %>>Metric (kg, cm)</option>
@@ -114,7 +114,7 @@
 
 				<!-- Height Field -->
 				<div>
-					<label for="height" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="height" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Height <span class="text-red-500">*</span>
 					</label>
 					<input 
@@ -125,8 +125,8 @@
 						step="0.1"
 						min="1"
 						max="300"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="Height"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="Height"
 						value="<%= typeof formData !== 'undefined' ? formData.height || '' : '' %>"
 					>
 					<p class="mt-1 text-xs text-gray-500">In inches (Imperial) or centimeters (Metric)</p>
@@ -134,7 +134,7 @@
 
 				<!-- Current Weight Field -->
 				<div>
-					<label for="currentWeight" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="currentWeight" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Current Weight <span class="text-red-500">*</span>
 					</label>
 					<input 
@@ -145,8 +145,8 @@
 						step="0.1"
 						min="0.1"
 						max="1000"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="Current weight"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="Current weight"
 						value="<%= typeof formData !== 'undefined' ? formData.currentWeight || '' : '' %>"
 					>
 					<p class="mt-1 text-xs text-gray-500">In pounds (Imperial) or kilograms (Metric)</p>
@@ -154,7 +154,7 @@
 
 				<!-- Goal Weight Field (Optional) -->
 				<div>
-					<label for="goalWeight" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="goalWeight" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Goal Weight <span class="text-gray-400 text-xs">(optional)</span>
 					</label>
 					<input 
@@ -164,8 +164,8 @@
 						step="0.1"
 						min="0.1"
 						max="1000"
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-						placeholder="Goal weight (can fill in later)"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+						placeholder-gray-500 dark:placeholder-slate-400" placeholder="Goal weight (can fill in later)"
 						value="<%= typeof formData !== 'undefined' ? formData.goalWeight || '' : '' %>"
 					>
 					<p class="mt-1 text-xs text-gray-500">In pounds (Imperial) or kilograms (Metric)</p>
@@ -173,14 +173,14 @@
 
 				<!-- Activity Level Dropdown -->
 				<div>
-					<label for="activityLevel" class="block text-sm font-medium text-gray-700 mb-2">
+					<label for="activityLevel" class="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
 						Activity Level <span class="text-red-500">*</span>
 					</label>
 					<select 
 						id="activityLevel" 
 						name="activityLevel" 
 						required
-						class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow bg-white"
+						class="w-full px-4 py-3 bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
 					>
 						<option value="" disabled <%= typeof formData === 'undefined' || !formData.activityLevel ? 'selected' : '' %>>Select your activity level</option>
 						<option value="SEDENTARY" <%= typeof formData !== 'undefined' && formData.activityLevel === 'SEDENTARY' ? 'selected' : '' %>>Sedentary (little or no exercise)</option>
@@ -200,7 +200,7 @@
 						required
 						class="w-4 h-4 mt-0.5 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
 					>
-					<label for="terms" class="ml-2 text-sm text-gray-600">
+					<label for="terms" class="ml-2 text-sm text-gray-600 dark:text-slate-300">
 						I agree to the 
 						<a href="/terms" class="text-blue-600 hover:underline">Terms of Service</a> 
 						and 
@@ -230,7 +230,7 @@
 			<!-- Login Link -->
 			<a 
 				href="/login" 
-				class="block w-full px-4 py-3 text-center border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+				class="block w-full px-4 py-3 text-center border border-gray-300 text-gray-700 dark:text-slate-300 font-medium rounded-lg hover:bg-gray-50 transition-colors"
 			>
 				Sign In
 			</a>
