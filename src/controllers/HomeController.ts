@@ -1,20 +1,39 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
+import { NewsService } from "../services/news.service";
 
 export class HomeController {
 	/**
 	 * GET /
-	 * Home page.
+	 * Home page with featured news.
 	 * Redirects to dashboard if user is already logged in.
 	 */
-	public index = (_req: Request, res: Response): void => {
-		// If user is already logged in, redirect to dashboard
-		if (res.locals.user) {
-			res.redirect("/dashboard");
-			return;
-		}
+	public index = async (
+		_req: Request,
+		res: Response,
+		next: NextFunction
+	): Promise<void> => {
+		try {
+			// If user is already logged in, redirect to dashboard
+			if (res.locals.user) {
+				res.redirect("/dashboard");
+				return;
+			}
 
-		res.render("home/index", {
-			title: "Welcome",
-		});
+			// Fetch featured news for the homepage
+			const featuredNews = await NewsService.getFeaturedNews(6);
+
+			// Format the published dates for display
+			const newsWithFormattedDates = featuredNews.map((article) => ({
+				...article,
+				formattedDate: NewsService.formatRelativeTime(article.publishedAt),
+			}));
+
+			res.render("home/index", {
+				title: "Weight Loss Watch - Track Together, Transform Together",
+				featuredNews: newsWithFormattedDates,
+			});
+		} catch (error) {
+			next(error);
+		}
 	};
 }
