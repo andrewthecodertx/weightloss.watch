@@ -9,6 +9,7 @@ import teamRoutes from "./teamRoutes";
 import settingsRoutes from "./settingsRoutes";
 import resourcesRoutes from "./resourcesRoutes";
 import aboutRoutes from "./aboutRoutes";
+import donateRoutes from "./donateRoutes";
 import { SettingsController } from "../controllers/SettingsController";
 import { WeightController } from "../controllers/WeightController";
 import { authenticate } from "../middleware/auth";
@@ -21,6 +22,7 @@ router.use("/", homeRoutes);
 router.use("/", webAuthRoutes); // Web auth pages (login, register, logout)
 router.use("/", aboutRoutes); // About routes (public)
 router.use("/", resourcesRoutes); // Resources routes (public)
+router.use("/", donateRoutes); // Donate routes (public)
 router.use("/api/auth", authRoutes); // API auth endpoints (JSON)
 router.post(
 	"/api/settings/theme",
